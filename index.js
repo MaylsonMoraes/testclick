@@ -8,7 +8,7 @@ require ('./src/services/databases');
 app.use(bodyParser.json());
 app.use(express.json());
 
-app.use('/img', require('./src/routes/category.routes'));
+app.use('/img', require('./routes/img-routes'));
 
 app.listen(3000, () => {
     console.log('Meu servidor está funcionando');

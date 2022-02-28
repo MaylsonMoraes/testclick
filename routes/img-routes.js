@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('underscore');
-const Img = require('../models/img');
+const Img = require('../src/models/img');
 
 //list all
 router.get('/', async (req, res) => {
@@ -14,11 +14,12 @@ router.get('/', async (req, res) => {
 });
 
 //um registro com id
-router.get('/:id', async (req, res) => {
+router.get('/random', async (req, res) => {
     try {
-        const id = req.params.id;
-        const img = await Img.findById(id);
-        res.json({ error: false, img });
+        let imgs = await Img.find({});
+        imgs = _.shuffle(imgs);
+        const sorteada = imgs[0];
+        res.json({ error: false, sorteada });
     } catch (err) {
         res.json({ error: true, message: err.message});
     }

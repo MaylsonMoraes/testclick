@@ -3,17 +3,17 @@ const router = express.Router();
 const _ = require('underscore');
 const Img = require('../src/models/img');
 
-//list all
+//list all decrescent
 router.get('/', async (req, res) => {
     try {
-        const imgs = await Img.find();
+        const imgs = await Img.find({},{title: 1, _id: 0}).sort({title: -1});
         res.json({ error: false, imgs});
     } catch (err) {
         res.json({ error: true, message: err.message });
     }
 });
 
-//um registro com id
+//um registro aleatorio
 router.get('/random', async (req, res) => {
     try {
         let imgs = await Img.find({});
@@ -51,24 +51,17 @@ router.put('/:id', async (req, res) => {
 
 //Deletar somente o registro com id
 router.delete('/:id', async (req, res) => {
-    const id = req.params.id
-
-    const img = await Img.findOne({ Id: id })
-
-        if(!img) {
-            res.status(422).json({message: 'O arquivo não foi encontrado!'})
-            return
-        }
 
         try {
-            
-            await Img.deleteOne({ Id: id})
+            const id = req.params.id;
+            const img = await Img.findByIdAndDelete( id );
 
-            res.status(200).json({message: 'Arquivo removido com sucesso!'})
+            res.status(200).json({message: 'Arquivo removido com sucesso!'});
 
-        } catch (error) {
-            res.status(500).json({ error: error })
+        } catch (err) {
+            res.status(422).json({message: 'O arquivo não foi encontrado!'});
         }
 });
+
 
 module.exports = router;

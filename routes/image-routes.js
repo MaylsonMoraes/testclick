@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('underscore');
-const Img = require('../src/models/img');
+const Image = require('../src/models/image');
 
 //list all decrescent
 router.get('/', async (req, res) => {
     try {
-        const imgs = await Img.find({},{title: 1, _id: 0}).sort({title: -1});
-        res.json({ error: false, imgs});
+        const images = await Image.find({},{title: 1, _id: 0}).sort({title: -1});
+        res.json({ error: false, images});
     } catch (err) {
         res.json({ error: true, message: err.message });
     }
@@ -16,21 +16,31 @@ router.get('/', async (req, res) => {
 //um registro aleatorio
 router.get('/random', async (req, res) => {
     try {
-        let imgs = await Img.find({});
-        imgs = _.shuffle(imgs);
-        const sorteada = imgs[0];
-        res.json({ error: false, sorteada });
+     const aleatorio = await Image.aggregate(
+            [ { $sample: { size: 1 } } ]
+         )
+        res.json({ error: false, aleatorio });
     } catch (err) {
         res.json({ error: true, message: err.message});
+    }
+});
+
+//listar registro com title enreco e data
+router.get('/one', async (req, res) => {
+    try {
+        const image = await Image.findOne({});
+        res.json({ error: false, image});
+    } catch (err) {
+        res.json({ error: true, message: err.message });
     }
 });
 
 //criar registro
 router.post('/', async (req, res) => {
     try {
-        const img = req.body;
-        const response = await new Img(img).save();
-        res.json({ error: false, img: response });
+        const image = req.body;
+        const response = await new Image(image).save();
+        res.json({ error: false, image: response });
     } catch (err) {
         res.json({ error: true, message: err.message });
     }
@@ -41,9 +51,9 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const novo_img = req.body;
-        const img = await Img.findByIdAndUpdate(id, novo_img);
-        res.json({ error: false, img });
+        const novo_image = req.body;
+        const image = await Image.findByIdAndUpdate(id, novo_image);
+        res.json({ error: false, image });
     } catch (err) {
         res.json({ error:true, message: err.message });
     }
@@ -54,7 +64,7 @@ router.delete('/:id', async (req, res) => {
 
         try {
             const id = req.params.id;
-            const img = await Img.findByIdAndDelete( id );
+            const image = await Image.findByIdAndDelete( id );
 
             res.status(200).json({message: 'Arquivo removido com sucesso!'});
 

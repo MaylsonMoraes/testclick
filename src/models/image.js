@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-module.exports = mongoose.model('Img', new Schema(
+module.exports = mongoose.model('Image', new Schema(
     {
         title: {
             type: String,
             required: true,
             unique: true
         },
-        endereco: {
+        address: {
             type: String,
             required: true,
             unique: true

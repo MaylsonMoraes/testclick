@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const _ = require('underscore');
 const Image = require('../src/models/image');
+const ImageLog = require('../src/models/imagelog');
 
 //list all decrescent
 router.get('/', async (req, res) => {
@@ -26,9 +27,10 @@ router.get('/random', async (req, res) => {
 });
 
 //listar registro com title enreco e data
-router.get('/one', async (req, res) => {
+router.get('/one/:id', async (req, res) => {
     try {
-        const image = await Image.findOne({});
+        const id = req.params.id;
+        const image = await ImageLog.findById(id);
         res.json({ error: false, image});
     } catch (err) {
         res.json({ error: true, message: err.message });

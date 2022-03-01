@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const _ = require('underscore');
+//const _ = require('underscore');
 const Image = require('../src/models/image');
 const ImageLog = require('../src/models/imagelog');
 
 //list all decrescent
 router.get('/', async (req, res) => {
     try {
-        const images = await Image.find({},{title: 1, _id: 0}).sort({title: -1});
+        const images = await Image.find({},{title: 1, _id: 0}).sort({date: -1});
         res.json({ error: false, images});
     } catch (err) {
         res.json({ error: true, message: err.message });
@@ -30,7 +30,7 @@ router.get('/random', async (req, res) => {
 router.get('/one/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const image = await ImageLog.findById(id);
+        const image = await Image.findById(id);
         res.json({ error: false, image});
     } catch (err) {
         res.json({ error: true, message: err.message });

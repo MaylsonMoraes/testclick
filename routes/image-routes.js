@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-//const _ = require('underscore');
 const Image = require('../src/models/image');
 const ImageLog = require('../src/models/imagelog');
 
@@ -26,12 +25,11 @@ router.get('/random', async (req, res) => {
     }
 });
 
-//listar registro com title enreco e data
-router.get('/one/:id', async (req, res) => {
+//listar registro com title endereco e data
+router.post('/log/:id', async (req, res) => {
     try {
-        const id = req.params.id;
-        const image = await Image.findById(id);
-        res.json({ error: false, image});
+        const imageLog = await new ImageLog({}).save();
+        res.json({ error: false, imageLog});
     } catch (err) {
         res.json({ error: true, message: err.message });
     }

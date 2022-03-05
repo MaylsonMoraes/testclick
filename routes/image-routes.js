@@ -1,3 +1,4 @@
+const { response } = require('express');
 const express = require('express');
 const router = express.Router();
 const Image = require('../src/models/image');
@@ -26,13 +27,16 @@ router.get('/random', async (req, res) => {
 });
 
 //listar registro com title endereco e data
-router.post('/log/:id', async (req, res) => {
+router.get('/log/:id', async (req, res) => {
+    
     try {
-        const imageLog = await new ImageLog({}).save();
-        res.json({ error: false, imageLog});
-    } catch (err) {
-        res.json({ error: true, message: err.message });
-    }
+        const _id = req.params.id;
+        const imageLog = await new ImageLog({_id}).save();
+           res.json({ error: false, imageLog });
+       } catch (err) {
+           res.json({ error: true, message: err.message});
+       }
+    
 });
 
 //criar registro

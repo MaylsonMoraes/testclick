@@ -30,8 +30,7 @@ router.get('/random', async (req, res) => {
 router.get('/log/:id', async (req, res) => {
     
     try {
-        const _id = req.params.id;
-        const imageLog = await new ImageLog({_id}).save();
+        const imageLog = await new ImageLog().save();
            res.json({ error: false, imageLog });
        } catch (err) {
            res.json({ error: true, message: err.message});
